@@ -1,4 +1,4 @@
-# Ng4AwtMongodbMochaTodos
+# Ng4 JWT Mongodb Mocha
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.6.
 

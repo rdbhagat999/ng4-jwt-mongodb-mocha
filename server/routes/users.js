@@ -21,7 +21,33 @@ userRoutes.get('/', (req, res) => {
 
 });
 
-userRoutes.get('/dashboard', authMiddleware, (req, res) => {
+// user login
+userRoutes.post('/login', (req, res) => {
+
+    let findUser = _.pick(req.body, ['email', 'password']);
+
+    User.findOne({ email: findUser.email })
+        .then((user) => {
+            if (!user) return res.status(404).send();
+            return user.compare_passwords(findUser.password);
+        })
+        .then((user) => {
+            if (!user) return res.status(404).send();
+            //console.log(user);
+            return user.generateAuthToken()
+                .then((authToken) => {
+                    res.header('x-auth', authToken).status(200).send({ authToken, user });
+                });
+        })
+        .catch((e) => {
+            console.log('notMatched');
+            return res.status(400).send();
+        });
+
+
+});
+
+userRoutes.get('/me', authMiddleware, (req, res) => {
     res.status(200).send(req.user);
 });
 
@@ -58,50 +84,22 @@ userRoutes.get('/:id', (req, res) => {
 // create new user
 userRoutes.post('/', (req, res) => {
 
-    let userBody = _.pick(req.body, ['name', 'email', 'password', 'phone']);
+    let userBody = _.pick(req.body, ['email', 'password']);
     userBody.createdAt = new Date().getTime();
-
     const newUser = new User(userBody);
+    //console.log(newUser);
 
     newUser.save()
         .then((user) => {
-
             if (!user) return res.status(400).send();
-
             user.generateAuthToken()
-                .then((authToken) => {
-                    res.header('x-auth', authToken).status(200).send({ user });
-                });
-        })
-        .catch((e) => {
-            res.status(400).send();
-        });
-
-});
-
-// user login
-userRoutes.post('/login', (req, res) => {
-
-    let findUser = _.pick(req.body, ['email', 'password']);
-
-    User.findOne({ email: findUser.email })
-        .then((user) => {
-            if (!user) return res.status(404).send();
-            return user.compare_passwords(findUser.password);
-        })
-        .then((user) => {
-            if (!user) return res.status(404).send();
-            //console.log(user);
-            return user.generateAuthToken()
                 .then((authToken) => {
                     res.header('x-auth', authToken).status(200).send(user);
                 });
         })
         .catch((e) => {
-            console.log('notMatched');
-            return res.status(400).send();
+            res.status(400).send();
         });
-
 
 });
 

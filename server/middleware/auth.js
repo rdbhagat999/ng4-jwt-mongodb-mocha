@@ -6,7 +6,7 @@ let authMiddleware = (req, res, next) => {
     console.log('auth function block');
 
     let authToken = req.header('x-auth');
-    //console.log('Auth: ', authToken);
+    console.log('Auth: ', authToken);
 
     if (_.isNil(authToken)) {
         return res.status(401).send();

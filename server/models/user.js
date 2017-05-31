@@ -12,19 +12,12 @@ const UserSchema = new mongoose.Schema({
         minlength: [2, 'Minimum length must be 2'],
         lowercase: true,
         trim: true,
-        required: true
-    },
-    gender: {
-        type: Number,
-        required: false,
-        default: 0,
-        min: 0,
-        max: 2
+        required: false
     },
     email: {
         type: String,
         required: true,
-        minlength: [5, 'Minimum length must be 5'],
+        minlength: [3, 'Minimum length must be 5'],
         maxlength: [45, 'Minimum length must be 45'],
         trim: true,
         unique: true,
@@ -37,11 +30,10 @@ const UserSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: true,
+        required: false,
         minlength: [12, 'Minimum length must be 12'],
         maxlength: [12, 'Max length must be 12'],
-        unique: true,
-        default: "000-000-0000"
+        unique: true
     },
     password: {
         type: String,
@@ -67,7 +59,7 @@ const UserSchema = new mongoose.Schema({
     }],
     createdAt: {
         type: Number,
-        required: true,
+        required: false,
         default: null
     },
     updatedAt: {
@@ -88,6 +80,7 @@ UserSchema.pre('save', function(next) {
         bcrypt.genSalt(10, function(err, salt) {
             bcrypt.hash(user.password, salt, function(err, hash) {
                 user.password = hash;
+                console.log(user)
                 next();
             });
         });

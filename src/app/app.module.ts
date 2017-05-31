@@ -14,14 +14,15 @@ import { AboutComponent } from './components/about/about.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 
+import { AuthService } from './services/auth.service';
 
-const appRoutes:Routes = [
-  { path:'', component: HomeComponent },
-  { path:'register', component: RegisterComponent },
-  { path:'login', component: LoginComponent },
-  { path:'dashboard', component: DashboardComponent },
-  { path:'about', component: AboutComponent },
-  { path:'contacts', component: ContactlistComponent }
+const appRoutes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'about', component: AboutComponent },
+  { path: 'contacts', component: ContactlistComponent }
 ];
 
 
@@ -43,7 +44,7 @@ const appRoutes:Routes = [
     HttpModule,
     RouterModule.forRoot( appRoutes )
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import * as swal from 'sweetalert';
+
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../user';
 
 @Component({
   selector: 'app-navbar',
@@ -8,16 +12,15 @@ import * as swal from 'sweetalert';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor( private authS: AuthService, private router: Router ) { 
   }
 
-  isLoggedIn:Boolean = false;
+  ngOnInit() { }
 
   logout() {
-  	swal('logout');
-  	this.isLoggedIn = false;
+    this.authS.logOut();
+    swal('logout successfull');
+    this.router.navigate(['']);
   }
 
 }
